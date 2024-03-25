@@ -1,0 +1,14 @@
+{
+    "name": "ianl28/prjtool",
+    "description": "A general utility written in PHP to facilliate tasks for the management and housekeeping of software development projects developed in the Golang and PHP languages.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ian Low",
+            "email": "ianlow28@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
