@@ -1,5 +1,208 @@
 #!/usr/bin/php
 <?php
-  echo "This is a new project called 'prjtool'
-";
+
+  if(!isset($argv[1])){
+    echo "Usage: prjtool <newgo>\n";
+    return;
+  }
+
+  define("__prjauthor", "Fred Bloggs");
+  define("__prjemail",  "fredbloggs@testemail.com");
+  define("__prjdate",  date("Y-m-d H:i:s"));
+  define("__prjrepos", "github.com");
+  define("__prjacct",  "somefabprogrammer2");
+  define("__prjname",  "myproj");
+  define("__prjdesc",  "A helpful project...");
+  $prjauthor="";
+  $prjemail="";
+  $prjdate="";
+  $prjrepos="";
+  $prjacct="";
+  $prjname="";
+  $prjdesc="";
+
+  if( ($argv[1] == "newgo")||($argv[1] == "newphp" ) ){
+    echo "Please enter the following...\n";
+    echo "1/18 author ('". __prjauthor."'): ";
+      $prjauthor=trim(fgets(STDIN)); 
+      $prjauthor=($prjauthor=="")  ? __prjauthor  : $prjauthor; 
+    echo "2/18 author's email ('". __prjemail ."'): ";
+      $prjemail=trim(fgets(STDIN)); 
+      $prjemail=($prjemail=="")  ? __prjemail  : $prjemail; 
+    echo "3/18 repository domain ('". __prjrepos."'): ";
+      $prjrepos=trim(fgets(STDIN)); 
+      $prjrepos=($prjrepos=="")  ? __prjrepos  : $prjrepos; 
+    echo "4/18 repository account ('". __prjacct ."'): ";
+      $prjacct=trim(fgets(STDIN)); 
+      $prjacct=($prjacct=="")  ? __prjacct  : $prjacct; 
+    echo "5/18 project name ('". __prjname ."'): "; 
+      $prjname=trim(fgets(STDIN)); 
+      $prjname=($prjname=="")  ? __prjname  : $prjname; 
+    echo "6/18 project description ('". __prjdesc ."'): ";
+      $prjdesc=trim(fgets(STDIN)); 
+      $prjdesc=($prjdesc=="")  ? __prjdesc  : $prjdesc; 
+
+    if(!file_exists($prjrepos)) mkdir($prjrepos); chdir($prjrepos); 
+    if(!file_exists($prjacct) ) mkdir($prjacct);  chdir($prjacct); 
+    if(!file_exists($prjname) ) mkdir($prjname);  chdir($prjname);  
+
+    //-----------------
+    // create main.go or prjname.php
+  if($argv[1] == "newgo"){
+    echo "7/18 ...creating main.go\n"; 
+    file_put_contents("main.go", "package main
+import \"fmt\"
+func main(){
+  fmt.Println(\"This is a new project called '$prjname'\");
+}
+");
+    //-----------------
+    // run go mod init
+    $cmd = "go mod init ".$prjrepos."/".$prjacct."/".$prjname;
+    echo "8/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+    //-----------------
+    // run go run .
+    $cmd = "go run .";
+    echo "9/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+    //-----------------
+    // run go build 
+    $cmd = "go build -o ".$prjname. ".exe .";
+    echo "10/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+  }else if($argv[1] == "newphp" ){
+    echo "7/18 ...creating ". $prjname. "\n"; 
+    file_put_contents($prjname, 
+"#!/usr/bin/php
+<?php
+  echo \"This is a new project called '$prjname'\n\";
 ?>
+");
+    //-----------------
+    // run chmod 755 prjname
+    $cmd = "chmod 755 ".$prjname;
+    echo "8/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+    //-----------------
+    // run go run .
+    $cmd = $prjname;
+    echo "9/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+    //-----------------
+    // run go build 
+    //$cmd = "go build -o ".$prjname. ".exe .";
+    //echo "10/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+  }
+
+    //-----------------
+    // create README.md
+    echo "11/18 ...creating README.md\n"; 
+    file_put_contents("README.md", 
+"README
+======
+". $prjdesc ."
+## Pre-requisites
+- Details coming soon!
+## Installation
+- Details coming soon!
+## Usage
+- Details coming soon!
+## Change Log
+Please see [CHANGELOG](CHANGELOG.md) for more information on the recent changes.
+## Contribute
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+## Credits
+- !!! (!!!)
+## License
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+");
+    
+    //-----------------
+    echo "12/18 ...creating CONTRIBUTE.md\n"; 
+    // create CONTRIBUTE.md
+    file_put_contents("CONTRIBUTE.md", 
+"Contributing
+-------------
+". $prjname ." is an open source, community-driven project. If you'd like to contribute,
+feel free to do this, but remember to follow this few simple rules:
+## Branching strategy
+- __Always__ base your changes on the `master` branch (all new development happens here),
+- When you create Pull Request, always select `master` branch as target, otherwise it
+will be closed (this is selected by default).
+## Coverage
+- All classes that interact solely with the core logic should be covered by Specs
+## Code style / Formatting
+- All new classes must carry the standard copyright notice docblock
+");
+
+    //-----------------
+    // create LICENSE.md
+    echo "13/18 ...creating LICENSE.md\n"; 
+    file_put_contents("LICENSE.md", 
+"MIT License
+Copyright (c) !!! !!! and contributors
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the \"Software\"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:\n
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.\n
+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+");
+
+    //-----------------
+    // create CHANGELOG.md
+    echo "14/18 ...creating CHANGELOG.md\n"; 
+    file_put_contents("CHANGELOG.md", 
+"# Changelog
+## 1.0.0 - yyyy-mm-dd
+### Changed
+- details
+### Fixed
+- details
+### Added
+- details
+");
+
+
+    //-----------------
+    // create .gitignore
+    echo "15/18 ...creating .gitignore\n"; 
+    file_put_contents(".gitignore", 
+"*.exe
+*.zip
+*.tar
+*.gz
+*.mp3
+*.mp4
+*.bin
+");
+
+    //-----------------
+    // run git init -b main
+    $cmd = "git init -b main";
+    echo "16/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+    //-----------------
+    // run git add .
+    $cmd = "git add .";
+    echo "17/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+    //-----------------
+    // run git commit -m "comment"
+    $cmd = "git commit -m \"Initial commit ".  __prjdate ."\"";
+    echo "18/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+  }
+?>
+
