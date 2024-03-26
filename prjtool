@@ -2,7 +2,7 @@
 <?php
 
   if(!isset($argv[1])){
-    echo "Usage: prjtool <newgo>\n";
+    echo "Usage: prjtool <newgo|newphp|showgitnotes>\n";
     return;
   }
 
@@ -24,7 +24,8 @@
   $prjname="";
   $prjdesc="";
 
-  if( ($argv[1] == "newgo")||($argv[1] == "newphp" ) ){
+  if        ($argv[1] == "showgitnotes" ){ showgitnotes(); 
+  }else if( ($argv[1] == "newgo")||($argv[1] == "newphp" ) ){
     echo "Please enter the following...\n";
     echo "1/18 author ('". __prjauthor."'): ";
       $prjauthor=trim(fgets(STDIN)); 
@@ -240,6 +241,13 @@ SOFTWARE.
     $cmd = "git commit -m \"Initial commit ".  __prjdate ."\"";
     echo "18/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
 
+
+    showgitnotes();
+  }
+
+
+function showgitnotes(){
+global $prjacct, $prjname, $prjrepos;
     //-------------------------
     // Notes:
     echo 
@@ -251,7 +259,7 @@ SOFTWARE.
 5. 'git add .' - run this to show any changes that need pushing/cleaning 
 6. 'git commit -a -m \"Comments, ". __prjdate. "\"' - run this to add and commit any changes
 ";
+}
 
-  }
 ?>
 
