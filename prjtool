@@ -216,6 +216,7 @@ SOFTWARE.
     echo "15/18 ...creating .gitignore\n"; 
     file_put_contents(".gitignore", 
 "*.exe
+*.swp
 *.zip
 *.tar
 *.gz
@@ -244,10 +245,12 @@ SOFTWARE.
     echo 
 "ADDITIONAL GIT COMMANDS:
 1. 'git remote add origin https://". $prjrepos ."/". $prjacct. "/". $prjname. ".git' - run this to set the origin as your ". $prjrepos ." repository
-1. 'git status' - run this to check for changes
-2. 
+2. 'git branch -M main' - run this to set main as the main branch
+3. 'git push -f -u origin main' - run this to force (-f) push the local git to the online repository
+4. 'git status' - run this to show any changes that need pushing/cleaning 
+5. 'git add .' - run this to show any changes that need pushing/cleaning 
+6. 'git commit -a -m \"Comments, ". __prjdate. "\"' - run this to add and commit any changes
 ";
-
 
   }
 ?>
