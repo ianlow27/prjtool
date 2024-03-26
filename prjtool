@@ -9,8 +9,10 @@
   define("__prjauthor", "Fred Bloggs");
   define("__prjemail",  "fredbloggs@testemail.com");
   define("__prjdate",  date("Y-m-d H:i:s"));
+  define("__prjyear",  date("Y"));
   define("__prjrepos", "github.com");
   define("__prjacct",  "somefabprogrammer2");
+  define("__prjvndr",  "pkgfabprogrammer2");
   define("__prjname",  "myproj");
   define("__prjdesc",  "A helpful project...");
   $prjauthor="";
@@ -18,6 +20,7 @@
   $prjdate="";
   $prjrepos="";
   $prjacct="";
+  $prjvndr="";
   $prjname="";
   $prjdesc="";
 
@@ -26,9 +29,14 @@
     echo "1/18 author ('". __prjauthor."'): ";
       $prjauthor=trim(fgets(STDIN)); 
       $prjauthor=($prjauthor=="")  ? __prjauthor  : $prjauthor; 
-    echo "2/18 author's email ('". __prjemail ."'): ";
-      $prjemail=trim(fgets(STDIN)); 
-      $prjemail=($prjemail=="")  ? __prjemail  : $prjemail; 
+    if($argv[1] == "newphp"){
+      echo "2/18 your packagist email ('". __prjemail ."'): ";
+        $prjemail=trim(fgets(STDIN)); 
+        $prjemail=($prjemail=="")  ? __prjemail  : $prjemail; 
+      echo "2/18 your packagist vendor name ('". __prjvndr ."'): ";
+        $prjvndr=trim(fgets(STDIN)); 
+        $prjvndr=($prjvndr=="")  ? __prjvndr  : $prjvndr; 
+    }
     echo "3/18 repository domain ('". __prjrepos."'): ";
       $prjrepos=trim(fgets(STDIN)); 
       $prjrepos=($prjrepos=="")  ? __prjrepos  : $prjrepos; 
@@ -46,8 +54,13 @@
     if(!file_exists($prjacct) ) mkdir($prjacct);  chdir($prjacct); 
     if(!file_exists($prjname) ) mkdir($prjname);  chdir($prjname);  
 
-    //-----------------
-    // create main.go or prjname.php
+  //-----------------
+  // create main.go or prjname.php
+  //--------------------------------------
+  //--------------------------------------
+  //--------------------------------------
+  //--------------------------------------
+  //--------------------------------------
   if($argv[1] == "newgo"){
     echo "7/18 ...creating main.go\n"; 
     file_put_contents("main.go", "package main
@@ -80,6 +93,23 @@ func main(){
 ?>
 ");
     //-----------------
+    echo "7/18 ...creating composer.json\n"; 
+    file_put_contents("composer.json", 
+"{
+    \"name\": \"". $prjvndr  ."/". $prjname ."\",
+    \"description\": \"". $prjdesc    ."\",
+    \"type\": \"project\",
+    \"license\": \"MIT\",
+    \"authors\": [
+        {
+            \"name\": \"".  $prjauthor ."\",
+            \"email\": \"". $prjemail  ."\"
+        }
+    ],
+    \"minimum-stability\": \"dev\",
+    \"require\": {}
+}");
+    //-----------------
     // run chmod 755 prjname
     $cmd = "chmod 755 ".$prjname;
     echo "8/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
@@ -95,6 +125,12 @@ func main(){
     //echo "10/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
 
   }
+  //--------------------------------------
+  //--------------------------------------
+  //--------------------------------------
+  //--------------------------------------
+  //--------------------------------------
+  //--------------------------------------
 
     //-----------------
     // create README.md
@@ -114,7 +150,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on the recent changes.
 ## Contribute
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## Credits
-- !!! (!!!)
+- ". $prjauthor. "
 ## License
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 ");
@@ -142,7 +178,7 @@ will be closed (this is selected by default).
     echo "13/18 ...creating LICENSE.md\n"; 
     file_put_contents("LICENSE.md", 
 "MIT License
-Copyright (c) !!! !!! and contributors
+Copyright (c) ". __prjyear ." ". $prjauthor ." and contributors
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the \"Software\"), to deal
 in the Software without restriction, including without limitation the rights
@@ -202,6 +238,16 @@ SOFTWARE.
     // run git commit -m "comment"
     $cmd = "git commit -m \"Initial commit ".  __prjdate ."\"";
     echo "18/18 ...running '$cmd'\n"; passthru($cmd); sleep(1);
+
+    //-------------------------
+    // Notes:
+    echo 
+"ADDITIONAL GIT COMMANDS:
+1. 'git remote add origin https://". $prjrepos ."/". $prjacct. "/". $prjname. ".git' - run this to set the origin as your ". $prjrepos ." repository
+1. 'git status' - run this to check for changes
+2. 
+";
+
 
   }
 ?>
